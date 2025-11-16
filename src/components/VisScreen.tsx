@@ -1,0 +1,175 @@
+import { useState } from "react";
+import { StatusBar } from "./StatusBar";
+import { Button } from "./ui/button";
+import { Slider } from "./ui/slider";
+import { Label } from "./ui/label";
+import { toast } from "sonner@2.0.3";
+import { Eye, Maximize, RotateCcw } from "lucide-react";
+
+interface VisScreenProps {
+  onLogout?: () => void;
+}
+
+export function VisScreen({ onLogout }: VisScreenProps) {
+  const [brightness, setBrightness] = useState([50]);
+  const [contrast, setContrast] = useState([50]);
+  const [sharpness, setSharpness] = useState([50]);
+  const [gain, setGain] = useState([50]);
+
+  const handleReset = () => {
+    setBrightness([50]);
+    setContrast([50]);
+    setSharpness([50]);
+    setGain([50]);
+    toast.success("Settings reset to default");
+  };
+
+  const handleFullscreen = () => {
+    toast.success("Entering fullscreen mode");
+  };
+
+  return (
+    <div className="flex flex-col h-full overflow-hidden">
+      <StatusBar onLogout={onLogout} />
+
+      <div className="flex-1 flex p-4 gap-4 overflow-auto">
+        {/* Video Panel */}
+        <div className="flex-1 bg-[#12181f] rounded-xl border border-zinc-800/50 shadow-lg overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/20 via-zinc-950 to-black flex items-center justify-center">
+            <div className="text-center space-y-4">
+              <Eye className="w-16 h-16 text-blue-500/50 mx-auto" />
+              <p className="text-blue-400">VIS SENSOR FEED</p>
+              <p className="text-zinc-600 text-sm">Visual Spectrum Camera</p>
+            </div>
+          </div>
+
+          {/* Sensor Badge */}
+          <div className="absolute top-4 left-4 px-3 py-1.5 bg-blue-500/20 border border-blue-500/50 rounded-lg backdrop-blur-sm">
+            <span className="text-blue-400 text-sm">VISIBLE SPECTRUM</span>
+          </div>
+        </div>
+
+        {/* Control Panel */}
+        <div className="w-80 space-y-4">
+          <div className="bg-[#12181f] rounded-xl border border-zinc-800/50 p-5 space-y-6 shadow-lg">
+            <h3 className="text-blue-400 text-sm tracking-wider">
+              VIS CONTROLS
+            </h3>
+
+            {/* Brightness */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <Label className="text-zinc-300">Brightness</Label>
+                <span className="text-zinc-500 text-sm">{brightness[0]}%</span>
+              </div>
+              <Slider
+                value={brightness}
+                onValueChange={setBrightness}
+                max={100}
+                step={1}
+                className="[&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-400"
+              />
+            </div>
+
+            {/* Contrast */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <Label className="text-zinc-300">Contrast</Label>
+                <span className="text-zinc-500 text-sm">{contrast[0]}%</span>
+              </div>
+              <Slider
+                value={contrast}
+                onValueChange={setContrast}
+                max={100}
+                step={1}
+                className="[&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-400"
+              />
+            </div>
+
+            {/* Sharpness */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <Label className="text-zinc-300">Sharpness</Label>
+                <span className="text-zinc-500 text-sm">{sharpness[0]}%</span>
+              </div>
+              <Slider
+                value={sharpness}
+                onValueChange={setSharpness}
+                max={100}
+                step={1}
+                className="[&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-400"
+              />
+            </div>
+
+            {/* Gain */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <Label className="text-zinc-300">Gain</Label>
+                <span className="text-zinc-500 text-sm">{gain[0]}%</span>
+              </div>
+              <Slider
+                value={gain}
+                onValueChange={setGain}
+                max={100}
+                step={1}
+                className="[&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-400"
+              />
+            </div>
+
+            <div className="h-px bg-zinc-800/50 my-4" />
+
+            {/* Action Buttons */}
+            <div className="space-y-2">
+              <Button
+                onClick={handleReset}
+                variant="outline"
+                className="w-full justify-start gap-2 bg-zinc-900/30 border-zinc-700/50 text-zinc-300 hover:bg-zinc-700/50"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Reset Settings
+              </Button>
+
+              <Button
+                onClick={handleFullscreen}
+                variant="outline"
+                className="w-full justify-start gap-2 bg-zinc-900/30 border-zinc-700/50 text-zinc-300 hover:bg-blue-500/10 hover:border-blue-500/50 hover:text-blue-400"
+              >
+                <Maximize className="w-4 h-4" />
+                View Fullscreen
+              </Button>
+            </div>
+          </div>
+
+          {/* Sensor Info */}
+          <div className="bg-[#12181f] rounded-xl border border-zinc-800/50 p-4 space-y-3 shadow-lg">
+            <h3 className="text-blue-400 text-sm tracking-wider">
+              SENSOR INFO
+            </h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-zinc-500">Type</span>
+                <span className="text-zinc-300">CMOS RGB</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-zinc-500">Resolution</span>
+                <span className="text-zinc-300">1920x1080</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-zinc-500">FPS</span>
+                <span className="text-zinc-300">60</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-zinc-500">FOV</span>
+                <span className="text-zinc-300">45°</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-zinc-500">Status</span>
+                <span className="text-emerald-400">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
